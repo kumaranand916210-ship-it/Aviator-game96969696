@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator - Crash Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- ====== AUTH PAGE ====== -->
+    <div id="authPage" class="auth-container">
+        <div class="auth-box">
+            <h1>✈️ Aviator</h1>
+            <p class="subtitle">Enter your phone number to play</p>
+            <input type="tel" id="phoneInput" placeholder="Your Phone Number" maxlength="10">
+            <button onclick="login()">Login / Signup</button>
+            <p id="authError" style="color:#ff4757;text-align:center;margin-top:10px;display:none;"></p>
+        </div>
+    </div>
+
+    <!-- ====== MAIN GAME UI ====== -->
+    <div id="mainContainer" class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">✈️ Aviator</div>
+            <div class="user-info">
+                <span class="user-id" id="userIdDisplay"></span>
+                <div class="balance">₹<span id="balanceDisplay">0</span> <span>balance</span></div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <div class="game-status waiting" id="gameStatusDisplay">⏳ Waiting for next round...</div>
+            
+            <!-- History -->
+            <div class="history-bar" id="historyBar"></div>
+            
+            <!-- Multiplier -->
+            <div class="multiplier-display waiting" id="multiplierDisplay">1.00x</div>
+            <div class="timer-display" id="timerDisplay">Next round in: 12s</div>
+
+            <!-- Bet Controls -->
+            <div class="bet-controls">
+                <input type="number" id="betAmount" placeholder="Enter amount" value="10" min="1">
+                <div class="bet-amounts">
+                    <button onclick="setBet(10)">₹10</button>
+                    <button onclick="setBet(50)">₹50</button>
+                    <button onclick="setBet(100)">₹100</button>
+                    <button onclick="setBet(500)">₹500</button>
+                </div>
+                <button class="action-btn bet-btn" id="betBtn" onclick="placeBet()">💰 Place Bet</button>
+                <button class="action-btn cashout-btn" id="cashoutBtn" onclick="cashOut()" disabled>🏃 Cash Out</button>
+            </div>
+        </div>
+
+        <!-- Deposit / Withdraw Tabs -->
+        <div style="background: linear-gradient(145deg, #131b2e, #1a2340); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.05);">
+            <div class="tabs">
+                <div class="tab-btn active" onclick="switchTab('deposit')">💰 Deposit</div>
+                <div class="tab-btn" onclick="switchTab('withdraw')">💸 Withdraw</div>
+                <div class="tab-btn" onclick="switchTab('transactions')">📋 History</div>
+            </div>
+
+            <!-- Deposit Tab -->
+            <div class="tab-content active" id="depositTab">
+                <div class="upi-display">
+                    <div class="upi-label">Pay to this UPI ID</div>
+                    <div class="upi-id" id="upiIdDisplay">7903368331@fam</div>
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="depositAmount" placeholder="Enter amount" min="1">
+                </div>
+                <div class="form-group">
+                    <label>UTR Number (from your payment)</label>
+                    <input type="text" id="depositUtr" placeholder="Enter UTR number">
+                </div>
+                <button class="submit-btn" onclick="submitDeposit()">Submit Deposit</button>
+                <p id="depositMsg" style="text-align:center;margin-top:10px;font-size:14px;"></p>
+            </div>
+
+            <!-- Withdraw Tab -->
+            <div class="tab-content" id="withdrawTab">
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Your UPI ID (to receive payment)</label>
+                    <input type="text" id="withdrawUpi" placeholder="Enter your UPI ID">
+                </div>
+                <button class="submit-btn" onclick="submitWithdraw()">Withdraw</button>
+                <p id="withdrawMsg" style="text-align:center;margin-top:10px;font-size:14px;"></p>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div class="tab-content" id="transactionsTab">
+                <div id="transactionsList">
+                    <p style="color:#6b7a9b;text-align:center;">No transactions yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
